@@ -9,7 +9,8 @@
 ## 安装
 ` npm install`
 
-> 不用在意python之类的报错。
+> 不用在意python之类的报错。但build目录下的font、images不能删去
+> 解决问题后，.gitignore里将build目录过滤掉
 ## 构建
 - assets/app-conf.js 中配置后端服务 前缀、默认为 /  
 - 跨域需要修改为具体后端请求地址: http://.....

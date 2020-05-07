@@ -1,8 +1,8 @@
-window.__ctx = "/agile";
+// window.__ctx = "/api/agile";
 
 ////跨域时修改 此 ctx
 //window.__ctx = "http://localhost:8080/agile-bpm-platform";
-// window.__ctx = "http://192.168.0.82:8555";
+window.__ctx = "http://192.168.0.82:8555";
 
 //jQuery 跨域处理
 jQuery(function () {  //, headers: { 'x-requested-with': 'XMLHttpRequest' }
