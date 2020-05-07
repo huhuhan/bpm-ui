@@ -1,27 +1,28 @@
-window.__ctx = "";
+window.__ctx = "/agile";
 
-////跨域时修改 此 ctx 
+////跨域时修改 此 ctx
 //window.__ctx = "http://localhost:8080/agile-bpm-platform";
+// window.__ctx = "http://192.168.0.82:8555";
 
 //jQuery 跨域处理
 jQuery(function () {  //, headers: { 'x-requested-with': 'XMLHttpRequest' }
 	jQuery.ajaxSetup({crossDomain: true, xhrFields: {withCredentials: true}});
 	jQuery.support.cors = true;
-}); 
+});
 
 /**
  * @url 如果不含ctx，添加ctx
  * @replacePageParam true /false
  * eg:user/getData?userId={userId}, 当前页面：userEdit.html?userId=1
  * 这时候会将1 赋值给userId
- * 
+ *
  */
 
 window.getCtxUrl = function(url,replaceRequestParam){
 	if(url && !url.startWith(__ctx) && !url.startWith("http")){
 		url.startWith("/")?"":url = "/"+url;
 		url = __ctx + url;
-		
+
 		//如果URL含?且需要替换页面请求参数，则进行格式化
 		if(replaceRequestParam && url.indexOf("?")!=-1 && $.getParams){
 			url = url.format($.getParams());
