@@ -3,6 +3,7 @@ node_modules
 dist
 dist.zip
 build
+build--
 build.zip
 
 # Log files
