@@ -3,7 +3,7 @@ var clicks = 0;//判断双击
 	var tooltip = $('<div/>').qtip({
 		content:{
 			text:'',
-		},	
+		},
 		}).qtip('api');
     //-----------------创建、添加日程--------------//
 	function openDetail(id, action, startTime, endTime) {
@@ -18,11 +18,11 @@ var clicks = 0;//判断双击
 			url+='?startTime=' + startTime + "&endTime=" + endTime;
 		}
 		var conf = { height:680,width:800,  url:'sys/schedule/'+url,  title:title,topOpen:true};
-		$.Dialog.open(conf); 
+		$.Dialog.open(conf);
 	}
     function complete(id,type,mainId) {
     	var title = "完成日程";
-		
+
 		var url="sys/schedule/scheduleComplete.html";
 		if(mainId) {
 			url+='?mainId=' + mainId;
@@ -31,7 +31,7 @@ var clicks = 0;//判断双击
 			url+='?mainId=' + id;
 		}
 		var conf = { height:520,width:600,  url:url,  title:title,topOpen:true };
-		$.Dialog.open(conf); 
+		$.Dialog.open(conf);
 
     }
     //打开任务链接
@@ -45,7 +45,7 @@ var clicks = 0;//判断双击
         var len = 0;
         for (var i = 0; i < str.length; i++) {
             var c = str.charCodeAt(i);
-            //单字节加1 
+            //单字节加1
             if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
                 len++;
             }
@@ -56,14 +56,14 @@ var clicks = 0;//判断双击
             	return str.substring(0,i-1);
             }
         }
-        
+
     }
     //计算中英文字符串长度
     function strlen(str) {
         var len = 0;
         for (var i = 0; i < str.length; i++) {
             var c = str.charCodeAt(i);
-            //单字节加1 
+            //单字节加1
             if ((c >= 0x0001 && c <= 0x007e) || (0xff60 <= c && c <= 0xff9f)) {
                 len++;
             }
@@ -75,7 +75,7 @@ var clicks = 0;//判断双击
     }
 	//--------------提示框信息-------------------//
 	function getEventMouseoverHtml(event){
-		
+
 		var html = '';
 		var taskType = "";
 		var remark = '';
@@ -102,9 +102,9 @@ var clicks = 0;//判断双击
 		//event.title.substring(0, event.title.indexOf('('))
 		html = '<table  class="form-table">	';
 		html +=	'<tr><th>备注:</th><td colspan="3">'+remark+'</td></tr>';
-		html +=	'<tr><th>任务类型:</th><td>'+taskType+'</td><th>日程进度:</th><td>'+(event.rateProgress == null ? 0 : event.rateProgress)+'%</td></tr>';		 
-		html +=	'<tr><th>提交人:</th><td>'+(event.committer == null ? " " : event.committer)+'</td><th>所属人:</th><td>'+(event.owner == null ? " " : event.owner)+'</td></tr>';		 
-		
+		html +=	'<tr><th>任务类型:</th><td>'+taskType+'</td><th>日程进度:</th><td>'+(event.rateProgress == null ? 0 : event.rateProgress)+'%</td></tr>';
+		html +=	'<tr><th>提交人:</th><td>'+(event.committer == null ? " " : event.committer)+'</td><th>所属人:</th><td>'+(event.owner == null ? " " : event.owner)+'</td></tr>';
+
 		var mainId = event.mainId || '';
 		var id = event.id || '';
 		if(event.rateProgress <=0) {
@@ -136,7 +136,7 @@ var clicks = 0;//判断双击
         return html;
 	}
   $(document).ready(function() {
-	  
+
 	  //--------------------日程表--------------------------//
      $('#calendar').fullCalendar({
          header: {
@@ -156,8 +156,8 @@ var clicks = 0;//判断双击
        monthNamesShort: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
        dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
        dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
-       eventLimitText  : "更多", 
-       dayPopoverFormat : "YYYY年M月d日", 
+       eventLimitText  : "更多",
+       dayPopoverFormat : "YYYY年M月d日",
        buttonText: {
            prev: "<",
            next: ">",
@@ -169,7 +169,7 @@ var clicks = 0;//判断双击
            day: '日',
            listWeek:'列表'
        },
-       navLinks: true, 
+       navLinks: true,
        selectable: true,
        selectHelper: true,
        editable: true,
@@ -201,7 +201,7 @@ var clicks = 0;//判断双击
                 	   });
         		   }
         	   }
-    		   
+
     	   } else {
     		   $.Dialog.confirm("创建日程","是否创建一个新日程？",function(){
        			   openDetail(undefined,'add',startTime,endTime);
@@ -210,7 +210,7 @@ var clicks = 0;//判断双击
        },
       //-----------------------------数据源--------------------------------------
        events: function(start, end, timezone, callback) {
-    	   
+
            $.ajax({
                url: __ctx+'/calendar/schedule/getEvents',//--获取所属者日程--
                dataType: 'json',
@@ -244,11 +244,12 @@ var clicks = 0;//判断双击
                 	   i++;
                    }
                    $.ajax({
-                       url: __ctx+'/calendar/schedule/getParticipantEvents',//--获取参与者日程--
+                       url: __ctx+'/calendar/schedule/getEvents',
                        dataType: 'json',
                        data: {
                            start: Date.parse(start._d),
                            end: Date.parse(end._d),
+                           isOwner: false   //--获取参与者日程--
                        },
                        success: function(data) {
                            i = 0;
@@ -280,7 +281,7 @@ var clicks = 0;//判断双击
                    });
                }
            });
-           
+
        },
        //--------------------------日程点击事件---------------------------------------
        eventClick: function( event, jsEvent, view ) {
@@ -293,7 +294,7 @@ var clicks = 0;//判断双击
 	   		   title = event.title.substring(0, event.title.indexOf('('));
 	   		   if(title.length > len) {
 	   			   title = title.substring(0,len) + "...";
-	   		   } 
+	   		   }
 	   	   }
     	   if(event.start._d.getDay() > 4) {
     		   topPositon = 'top right';
@@ -302,7 +303,7 @@ var clicks = 0;//判断双击
     		   topPositon = 'top left';
     		   bottomPosition = 'bottom left';
     	   }
-    	   tooltip =  $(this).qtip({  
+    	   tooltip =  $(this).qtip({
 				content:{
 					text:'',
 					title:{
@@ -322,7 +323,7 @@ var clicks = 0;//判断双击
 		            fixed: true,
 	                delay: 500
 		        },
-		        style: {  classes : 'qtip-default  qtip qtip-bootstrap qtip-shadow',width:500,height: 280 },	
+		        style: {  classes : 'qtip-default  qtip qtip-bootstrap qtip-shadow',width:500,height: 280 },
 	 		}).qtip('api');
     	  var html = getEventMouseoverHtml(event);
     	  tooltip.set({
@@ -330,22 +331,22 @@ var clicks = 0;//判断双击
 			})
 			.reposition(event).show(event);
      	  /* if(event.start._d.getDay() > 4) {
-     		
+
      	  } else {
-     		
+
      	  } */
        },
-       dayClick: function( date, allDay ) { 
+       dayClick: function( date, allDay ) {
     	   tooltip.hide();
     	   tooltip.disable();
        },
-/*     	   
+/*
     	   var html = getEventMouseoverHtml(event);
-     	  $(this).qtip({  
+     	  $(this).qtip({
  				content:{
  					text:html,
  					title:{
- 						text:"日程信息"			
+ 						text:"日程信息"
  					}
  				},
  		        position: { my: 'top center', at: 'bottom center'},
@@ -361,12 +362,12 @@ var clicks = 0;//判断双击
  		            fixed: true,
  	                delay: 300
  		        },
- 		        style: {  classes : 'qtip-default  qtip qtip-bootstrap qtip-shadow'  },			    
+ 		        style: {  classes : 'qtip-default  qtip qtip-bootstrap qtip-shadow'  },
  	 	});
-    	   
+
        }, */
        //------------------------日程拖拽事件-------------------------------------
-       eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ) { 
+       eventDrop: function( event, delta, revertFunc, jsEvent, ui, view ) {
    		   $.post(
 	           __ctx+'/calendar/schedule/dragUpdate',
                {
@@ -388,4 +389,4 @@ var clicks = 0;//判断双击
        	   );
        },
      });
-  });     
+  });

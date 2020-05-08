@@ -1,7 +1,7 @@
 var app = angular.module('app',['base']);
 app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 	scope.getUserMsg = function(){
-		var denfer = baseService.post(__ctx+"/org/userResource/userMsg",{});
+		var denfer = baseService.get(__ctx+"/org/userResource/userMsg",{});
 		denfer.then(
 			function(result){
 				if(!result.isOk && result.code==="401"){
@@ -10,22 +10,22 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 				}else if(!result.isOk){
 					$.Toast.error(result.msg);
 				}
-				
+
 				scope.userMsg = FastJson.format(result).data;
 				scope.userRes = scope.userMsg.userMenuList;
-				
+
 				//将子系统url前缀添加至top中
 				top.subSystem = {};
 				for(var i=0,s;s=scope.userMsg.subsystemList[i++];){
 					top.subSystem[s.alias] = s;
 				}
-				
+
 				//将权限放到缓存中
 				if(window.localStorage){
 					 window.localStorage.setItem( 'buttonPermision', JSON.stringify(scope.userMsg.buttonPermision));
 					 console.info(window.localStorage.buttonPermision);
 				}
-				
+
 				var menuId = $.getCookie("default_menu");
 				var currentMenu=null ;
 				//获取cookie中的当前菜单
@@ -37,19 +37,19 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 						}
 					}
 				}
-				
+
 				if(!currentMenu&&scope.userRes){
 					currentMenu =scope.userRes[0];
 				}
 				scope.topClick(currentMenu);
-				
+
 			},function(aa){
-				
+
 			}
 		)
 	}
 	scope.getUserMsg();
-	
+
 	scope.topClick = function(topMenu){
 		if(!topMenu)return;
 		if(topMenu.children && topMenu.children.length>0){
@@ -69,11 +69,11 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 		if(!menu.url){
 			return;
 		}
-		
+
 		if(menu.url.indexOf("http")!= -1){
 			noReload = true; //跨域的都不支持reload
 		}
-		
+
 		var hasOpened = false;
 		for(var i=0,m;m=scope.openedMenu[i++];){
 			m.active = "";
@@ -94,16 +94,16 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 			console.info(" layer load()" + index);
 			$frame.load(function (){
 				console.info(" layer close()"+ index);
-				layer.close(index); 
+				layer.close(index);
 	        });*/
 		},2)
 	}
-	
+
 	scope.relaodIfream = function(menu){
 		var $frame = $("#"+menu.id+"iframe");
 		$frame[0].contentWindow.location.reload();
 	}
-	
+
 	scope.closeTab = function(menu){
 		var idx = 0;
 		for(var i=0,m;m=scope.openedMenu[i++];){
@@ -113,7 +113,7 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 			}
 		}
 		if(menu.active=="active") scope.openedMenu[idx-2].active ="active";
-		
+
 		var $frame = $("#"+menu.id+"iframe");
 		try {
 			$frame[0].contentWindow.document.write('');
@@ -121,24 +121,24 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 		} catch (e) {
 		}
 		scope.openedMenu.splice(idx-1,1);
-	} 
-	
+	}
+
 	scope.getEnviroment = function(){
 		if(!scope.userMsg)return "";
-		
+
 		if(scope.userMsg.currentEnviroment==="DEV") return " | 开发";
 		if(scope.userMsg.currentEnviroment==="SIT") return " | 测试";
 		if(scope.userMsg.currentEnviroment==="UAT") return " | 用户测试";
 		if(scope.userMsg.currentEnviroment==="GRAY") return " | 灰度";
 		return "";
 	}
-	
+
 	scope.changeCurrentSystem = function(system){
 		if(system.url){
 			window.open(system.url,system.openType ||"_top");
 			return;
 		}
-		
+
 		var get = baseService.get(__ctx+"/userResource/changeSystem?systemAlias="+system.alias);
 		$.getResultData(get,function(){
 			window.location = "index.html";
@@ -150,16 +150,16 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 			window.location = "index.html";
 		})
 	}
-	
+
 	scope.logout = function(systemId){
 		var get = baseService.get(__ctx+"/logout");
 		$.getResultData(get,function(){
 			window.location = "login.html";
 		})
 	}
-	
+
 	scope.closeAll = function(){
-		scope.openedMenu = [{id:"indexpage",active:"active",name:"首页",noclose:true,url:"sys/workbenchPanel/myWorkbench.html"}]; 
+		scope.openedMenu = [{id:"indexpage",active:"active",name:"首页",noclose:true,url:"sys/workbenchPanel/myWorkbench.html"}];
 	}
 	scope.cloaseOther = function(){
 		var array = [{id:"indexpage",active:"active",name:"首页",noclose:true,url:"sys/workbenchPanel/myWorkbench.html"}];
@@ -170,7 +170,7 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 		}
 		 scope.openedMenu = array;
 	}
-	
+
 	scope.closeOthers = function(){
 		var array = [{id:"indexpage",active:"active",name:"首页",noclose:true,url:"sys/workbenchPanel/myWorkbench.html"}];
 		for(var i=0,item;item = scope.openedMenu[i++];){
@@ -180,7 +180,7 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 		}
 		 scope.openedMenu = array;
 	}
-	
+
 	scope.scrollCurrent = function(){
 		for(var i=0,item;item = scope.openedMenu[i++];){
 			if(item.active === "active"){
@@ -189,14 +189,14 @@ app.controller("indexCtrl",['$scope','baseService',function(scope,baseService){
 			}
 		}
 	}
-	 
-	scope.openedMenu = [{id:"indexpage",active:"active",name:"首页",noclose:true,url:"sys/workbenchPanel/myWorkbench.html"}]; 
+
+	scope.openedMenu = [{id:"indexpage",active:"active",name:"首页",noclose:true,url:"sys/workbenchPanel/myWorkbench.html"}];
 	// 左移按扭
 	$('.J_tabLeft').on('click', scrollTabLeft);
 	// 右移按扭
 	$('.J_tabRight').on('click', scrollTabRight);
-	
-	
+
+
 	// url特殊处理
 	window.setTimeout(function(){
 		$("#indexpageiframe").attr("src", "sys/workbenchPanel/myWorkbench.html");
@@ -241,11 +241,11 @@ if(top != window){
 //tab:{name:"tab名字",url:url,id:"标识"}
 
 window.addTab = function(tab,fullTab){
-	var scope =  angular.element($("[ng-controller='indexCtrl']")).scope(); 
+	var scope =  angular.element($("[ng-controller='indexCtrl']")).scope();
 	scope.$apply(function(){
 		scope.menuClick(tab);
 	});
-	
+
 	if(fullTab){
 		window.setTimeout(function(){
 			$(".navbar-minimalize")[0].click();
