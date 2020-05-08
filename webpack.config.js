@@ -48,6 +48,16 @@ module.exports = {
   ],
   devServer: {
     inline: true,
+    proxy: {
+      '/api/agile': {
+        target: "http://192.168.0.82:8666",
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api/agile': ''
+        }
+      },
+    }
   },
 
 }

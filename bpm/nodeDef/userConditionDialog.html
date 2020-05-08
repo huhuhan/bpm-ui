@@ -3,7 +3,15 @@
 <link href="../../build/common/base.css" rel="stylesheet">
 <script type="text/javascript" src="../../build/common/base.js"></script>
 <script type="text/javascript" src="../../build/common/ngEdit.js"></script>
+
+<script src="../../assets/app-conf.js"></script>
+<script src="../../assets/js/common/base/baseService.js" type="text/javascript" ></script>
+<script src="../../assets/js/common/base/baseDirective.js" type="text/javascript" ></script>
+<script src="../../assets/js/plugins/layer/layer.min.js"></script>
+
 <script type="text/javascript" src="../../assets/js/platform/bpm/nodeDef/userConditionController.js"></script>
+
+
 
 <script type="text/javascript">
 	var flowKey = $.getParam("flowKey");
@@ -35,7 +43,7 @@
 						<th width="360">人员选择</th>
 						<th>
 						是否抽取 <span class="fa fa-question-circle text-info" ab-tip title="若人员为组类型，抽取，任务候选人为当前组所有人。若不抽取。则候选人为组，不具体到人。<br>eg:如果某岗位，抽取。则候选人在任务产生时获取该岗位所有人作为候选人。若不抽取，则候选人为该岗位，任务产生后该岗位人员发生变动不受影响"></span></th>
-						<th>运算类型 
+						<th>运算类型
 						<span class="fa fa-question-circle text-info" ab-tip title="与前一列进行运算，eg:且，则说明与前一列共有的人员才会作为任务候选人"></span></th>
 						<th>操作</th>
 					</tr>
@@ -48,12 +56,12 @@
 						</td>
 						<td>
 							<a ng-show="'approver,sameNode'.indexOf(calc.pluginType)==-1" href="javascript:javaScript:void(0)" class="btn btn-xs {{calc.description?'btn-primary':'btn-danger'}}" ng-click="selector(calc)">选择</a>
-							
-							<select ng-if="calc.pluginType=='sameNode'"  ng-model="calc.nodeId"  class="form-control"  
+
+							<select ng-if="calc.pluginType=='sameNode'"  ng-model="calc.nodeId"  class="form-control"
 								ng-options="node.nodeId as node.nodeName for node in nodeList" >
 									<option value="">请选择</option>
 							</select>
-							 
+
 							<span ng-if="calc.description && calc.pluginType!='sameNode'">[{{calc.description}}]</span>
 						</td>
 						<td>
@@ -102,11 +110,11 @@
 
 fieldset.scheduler-border {
     border: 1px groove #ddd !important;
-    padding: 0 0.4em 1.4em 0.4em !important; 
+    padding: 0 0.4em 1.4em 0.4em !important;
     /* margin: 0 0 1.5em 0 !important; */
     -webkit-box-shadow:  0px 0px 0px 0px #000;
 }
-legend{ 
+legend{
 	font-size:18px!important;
 	padding: initial;
 	margin: 10px;
