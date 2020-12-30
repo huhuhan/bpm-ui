@@ -1,4 +1,5 @@
-window.__ctx = "/api/agile";
+// window.__ctx = "/api/agile";
+window.__ctx = "/yh";
 
 ////跨域时修改 此 ctx
 //window.__ctx = "http://localhost:8080/agile-bpm-platform";
